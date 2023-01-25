@@ -14,12 +14,12 @@ public class RestResponseEntityExceptionHandler {
     @ExceptionHandler(PrescoringException.class)
     public ResponseEntity<ErrorMessage> prescoringException(PrescoringException ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
-                HttpStatus.OK.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
 
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

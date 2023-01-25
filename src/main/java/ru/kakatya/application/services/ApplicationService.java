@@ -34,7 +34,6 @@ public class ApplicationService {
 
     private void prescoring(LoanApplicationRequestDTO loanApplicationRequestDTO) throws PrescoringException {
         LOGGER.info("Prescoring");
-        boolean result = true;
         List<String> message = new ArrayList<>();
         LocalDate today = LocalDate.now();
         String emailPattern = "[\\w\\.]{2,50}@[\\w\\.]{2,20}";
@@ -48,42 +47,35 @@ public class ApplicationService {
 
         if (!name.matcher(loanApplicationRequestDTO.getFirstName()).matches() &&
                 !name.matcher(loanApplicationRequestDTO.getLastName()).matches()) {
-            result = false;
             message.add("Client name is incorrect ");
         }
         if (loanApplicationRequestDTO.getMiddleName() != null &&
                 !name.matcher(loanApplicationRequestDTO.getMiddleName()).matches()) {
-            result = false;
             message.add("Client middle name is incorrect ");
         }
 
 
         if (!email.matcher(loanApplicationRequestDTO.getEmail()).matches()) {
-            result = false;
             message.add("Client email is incorrect ");
         }
 
 
         if (ChronoUnit.YEARS.between(loanApplicationRequestDTO.getBirthdate(), today) < 18) {
-            result = false;
             message.add("Client does not pass by age ");
         }
 
         if (!passportSeries.matcher(loanApplicationRequestDTO.getPassportSeries()).matches() &&
                 !passportNumber.matcher(loanApplicationRequestDTO.getPassportNumber()).matches()) {
-            result = false;
             message.add("Passport's date is incorrect ");
         }
         if (loanApplicationRequestDTO.getAmount().compareTo(new BigDecimal("10000")) < 0) {
-            result = false;
             message.add("Request amount is incorrect ");
         }
 
         if (loanApplicationRequestDTO.getTerm() < 6) {
-            result = false;
             message.add("Term is incorrect");
         }
-        if (!result) {
+        if (!message.isEmpty()) {
             LOGGER.error(message);
             throw new PrescoringException(message.toString());
         }
