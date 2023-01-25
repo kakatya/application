@@ -66,8 +66,6 @@ class ApplicationControllerTest {
 
     @Test
     void offerSelection() {
-        applicationController = new ApplicationController();
-        ReflectionTestUtils.setField(applicationController, "applicationService", applicationService);
         applicationController.offerSelection(loanOfferDTO);
         verify(applicationService, times(1))
                 .offerSelection(loanOfferDTO);
